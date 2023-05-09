@@ -1,0 +1,57 @@
+syntax = "proto3";
+ 
+package kbtg1000;
+ 
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+import "google/protobuf/timestamp.proto";
+ 
+option go_package = "kbtg/kbtg1000";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "Echo Service";
+    version: "1.0";
+    contact: {
+      name: "initial echo project";
+      url: "https://kbtg.tech/jirat.sr/go-initial-project";
+      email: "jirat.sr@kbtg.tech";
+    };
+  };
+  consumes: "application/json";
+  produces: "application/json";
+  responses: {
+    key: "404";
+    value: {
+      description: "Returned when the resource does not exist.";
+      schema: {
+        json_schema: {
+          type: STRING;
+        }
+      }
+    }
+  }
+};
+ 
+message Echo {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string status = 4;
+  google.protobuf.Timestamp create_date = 5;
+  google.protobuf.Timestamp update_date = 6;
+}
+ 
+message EchoList {
+  string api = 1;
+  repeated Echo echoList = 2;
+}
+ 
+service EchoService {
+  rpc Query(Echo) returns (EchoList) {
+    option (google.api.http) = {
+      post: "/api/kbtg1000/echo"
+      body: "*"
+    };
+  }
+}
